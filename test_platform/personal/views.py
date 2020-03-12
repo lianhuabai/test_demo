@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from  django.http import HttpResponse
+from  django.http import HttpResponse,HttpResponseRedirect
+from django.contrib import auth
+from  django.contrib.auth.decorators import login_required
 # Create your views here.
 def say_hello(request):
     name = request.GET.get("name","")
@@ -16,11 +18,22 @@ def index(request):
     else:
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
-        print(username)
-        print(password)
         if username == "" or password == "":
             return render(request, "index.html", {"error": "用户名或密码输入为空"})
-        elif username != "ygc" or password != "930105":
-            return render(request, "index.html", {"error": "用户名或密码错误"})
-        elif username == "ygc" and password == "930105":
-            return HttpResponse("登录成功")
+        user = auth.authenticate(username=username,password=password)
+        print("user--------",user)
+        if user is None:
+            return render(request,"index.html",{"error":"用户名或者密码错误"})
+        else:
+            auth.login(request,user)#记录用户登录状态
+            return  HttpResponseRedirect("/manage/")#登录成功重定向
+
+#登录成功管理页面
+@login_required()
+def manage(request):
+    return render(request,"manage.html")
+
+#退出登录
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/index/")
