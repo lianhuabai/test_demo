@@ -22,6 +22,7 @@ urlpatterns = [
     path('hello/',views.say_hello),
     path('index/',views.index),
     path('',views.index),
-    path('manage/',views.manage),
+    path('project/',views.project),
     path('logout/',views.logout),
+    path('modeul/',views.modeul),
 ]

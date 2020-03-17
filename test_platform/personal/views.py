@@ -26,12 +26,17 @@ def index(request):
             return render(request,"index.html",{"error":"用户名或者密码错误"})
         else:
             auth.login(request,user)#记录用户登录状态
-            return  HttpResponseRedirect("/manage/")#登录成功重定向
+            return  HttpResponseRedirect("/project/")#登录成功重定向
 
-#登录成功管理页面
+#登录成功项目管理页面
 @login_required()
-def manage(request):
-    return render(request,"manage.html")
+def project(request):
+    return render(request, "project.html")
+
+#模块管理
+@login_required()
+def modeul(request):
+    return render(request, "modeul.html")
 
 #退出登录
 def logout(request):
